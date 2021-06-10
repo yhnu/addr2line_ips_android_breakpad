@@ -132,22 +132,19 @@ jobs:
       - name: Build archive
         shell: bash
         run: |
-          outdir="$(ci/cargo-out-dir "${{ env.TARGET_DIR }}")"
           staging="ripgrep-${{ needs.create-release.outputs.rg_version }}-${{ matrix.target }}"
           mkdir -p "$staging"/{complete,doc}
 
           cp {README.md,COPYING,UNLICENSE,LICENSE-MIT} "$staging/"
           cp {CHANGELOG.md,FAQ.md,GUIDE.md} "$staging/doc/"
-          cp "$outdir"/{rg.bash,rg.fish,_rg.ps1} "$staging/complete/"
           cp complete/_rg "$staging/complete/"
 
           if [ "${{ matrix.os }}" = "windows-2019" ]; then
-            cp "target/${{ matrix.target }}/release/rg.exe" "$staging/"
+            cp "target/${{ matrix.target }}/release/ips_breakpad.exe" "$staging/"
             7z a "$staging.zip" "$staging"
             echo "ASSET=$staging.zip" >> $GITHUB_ENV
           else
             # The man page is only generated on Unix systems. ¯\_(ツ)_/¯
-            cp "$outdir"/rg.1 "$staging/doc/"
             cp "target/${{ matrix.target }}/release/rg" "$staging/"
             tar czf "$staging.tar.gz" "$staging"
             echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
