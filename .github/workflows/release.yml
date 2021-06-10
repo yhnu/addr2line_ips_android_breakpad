@@ -132,12 +132,8 @@ jobs:
       - name: Build archive
         shell: bash
         run: |
-          staging="ripgrep-${{ needs.create-release.outputs.rg_version }}-${{ matrix.target }}"
+          staging="ips_breakpad-${{ needs.create-release.outputs.rg_version }}-${{ matrix.target }}"
           mkdir -p "$staging"/{complete,doc}
-
-          cp {README.md,COPYING,UNLICENSE,LICENSE-MIT} "$staging/"
-          cp {CHANGELOG.md,FAQ.md,GUIDE.md} "$staging/doc/"
-          cp complete/_rg "$staging/complete/"
 
           if [ "${{ matrix.os }}" = "windows-2019" ]; then
             cp "target/${{ matrix.target }}/release/ips_breakpad.exe" "$staging/"
