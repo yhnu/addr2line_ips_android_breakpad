@@ -121,5 +121,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: target/${{ matrix.target }}/release/ips_breakpad.exe
+          files: target/${{ matrix.target }}/release/*.exe
           prerelease: ${{ contains(github.ref, '-') }}
