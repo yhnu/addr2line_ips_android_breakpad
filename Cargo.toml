@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "./ips_breakpad",
+    "./addr2line_breakpad"
+]

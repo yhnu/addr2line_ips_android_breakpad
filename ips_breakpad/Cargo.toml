@@ -1,0 +1,12 @@
+[package]
+name = "ips_breakpad"
+version = "0.1.0"
+authors = ["yhnu <buutuud@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+addr2line_breakpad = { path="../addr2line_breakpad" }
+clap = "2.33.0"
+regex = "1"
