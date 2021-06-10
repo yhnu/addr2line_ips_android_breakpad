@@ -109,7 +109,8 @@ fn parser_ips(ips: &Path, soname: &str, symfile: &SymbolFile) {
 fn main() {
     let matches = App::new("addr2line for ips Breakpad symbol file")
         .version("1.0")
-        .author("yiluoyang <buutuud@gmail.com>")
+        .author("yiluoyang <buutuud@gmail.com>/liudingsan <lds2012@gmail.com>")
+        .after_help("EXAMPLE:\n    ips_breakpad UnityFramework.sym jxpocket.ips")
         .arg(
             Arg::with_name("input")
                 .help("input symbol file")
