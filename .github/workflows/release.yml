@@ -116,45 +116,10 @@ jobs:
       - name: Build release binary
         run: ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
 
-      - name: Strip release binary (linux and macos)
-        if: matrix.build == 'linux' || matrix.build == 'macos'
-        run: strip "target/${{ matrix.target }}/release/rg"
-
-      - name: Strip release binary (arm)
-        if: matrix.build == 'linux-arm'
-        run: |
-          docker run --rm -v \
-            "$PWD/target:/target:Z" \
-            rustembedded/cross:arm-unknown-linux-gnueabihf \
-            arm-linux-gnueabihf-strip \
-            /target/arm-unknown-linux-gnueabihf/release/rg
-
-      - name: Build archive
-        shell: bash
-        run: |
-          staging="ips_breakpad-${{ needs.create-release.outputs.rg_version }}-${{ matrix.target }}"
-          mkdir -p "$staging"/{complete,doc}
-
-          if [ "${{ matrix.os }}" = "windows-2019" ]; then
-            cp "target/${{ matrix.target }}/release/ips_breakpad.exe" "$staging/"
-            7z a "$staging.zip" "$staging"
-            echo "ASSET=$staging.zip" >> $GITHUB_ENV
-          else
-            # The man page is only generated on Unix systems. ¯\_(ツ)_/¯
-            cp "target/${{ matrix.target }}/release/rg" "$staging/"
-            tar czf "$staging.tar.gz" "$staging"
-            echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
-          fi
-
       - name: Upload release archive
         uses: softprops/action-gh-release@v1
-        # uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ./*.zip
+          files: target/${{ matrix.target }}/release/ips_breakpad.exe
           prerelease: ${{ contains(github.ref, '-') }}
-          # upload_url: ${{ needs.create-release.outputs.upload_url }}
-          # asset_path: ${{ env.ASSET }}
-          # asset_name: ${{ env.ASSET }}
-          # asset_content_type: application/octet-stream
